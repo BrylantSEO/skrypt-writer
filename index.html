@@ -630,7 +630,7 @@ async function streamGenerate(model, messages, onChunk, onDone) {
       model,
       messages,
       stream: true,
-      max_tokens: 16000,
+      max_tokens: 32000,
       temperature: 0.7,
     })
   });
@@ -753,6 +753,10 @@ ${scriptContent}
 - Wyciągnij ze skryptu KLUCZOWE koncepty, definicje, analogie i przykłady — przedstaw je wizualnie
 - Każdy element wizualny powinien mieć krótkie wyjaśnienie wzięte ze skryptu
 - NIE wymyślaj treści — wszystko musi pochodzić ze skryptu
+- KRYTYCZNE: Jeśli używasz tabów/zakładek, MUSISZ dołączyć kompletny, działający JavaScript na końcu pliku w tagu <script>. Każda funkcja onclick MUSI mieć implementację. Testuj mentalnie czy każdy klik działa.
+- JavaScript MUSI być PRZED zamknięciem </body> i MUSI zawierać ALL funkcje użyte w onclick/oninput
+- Ogranicz liczbę sekcji/tabów do max 5-6 żeby zmieścić się w limicie tokenów
+- Preferuj prostsze, ale KOMPLETNE i DZIAŁAJĄCE rozwiązania zamiast rozbudowanych ale uciętych
 
 Zwróć TYLKO kod HTML, nic więcej.` }
   ];
