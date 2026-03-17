@@ -759,27 +759,52 @@ ${scriptContent}
 
 ---
 
-**Wymagania:**
+**Wymagania techniczne:**
 - Single HTML file, all CSS and JS inline
-- Dark theme: bg #0a0a0f, text #e4e4ef, accent #6c5ce7, accent2 #a29bfe, green #00b894
+- Dark theme: bg #0a0a0f, surface #12121a, surface2 #1a1a26, surface3 #22223a, text #e4e4ef, text-dim #9999bb, accent #6c5ce7, accent2 #a29bfe, green #00b894, orange #fd9644, red #e17055, border rgba(108,92,231,0.2)
 - Responsive, wygląda świetnie na 1920×1080
-- Interaktywne: klikalne kroki, animacje CSS, efekty hover
-- Diagramy/wykresy w SVG lub CSS (bez zewnętrznych obrazów)
-- Font: system fonts (Inter, -apple-system)
-- Header z tytułem lekcji i numerem modułu
-- Wybierz NAJLEPSZY typ wizualizacji dla treści skryptu:
-  * Flowchart/pipeline (jeśli proces)
-  * Interaktywna tabela/macierz (jeśli klasyfikacja)
-  * Animowany diagram (jeśli mechanizm)
-  * Porównanie Before/After (jeśli optymalizacja)
-  * Klikalna mapa (jeśli architektura)
-- Wyciągnij ze skryptu KLUCZOWE koncepty, definicje, analogie i przykłady — przedstaw je wizualnie
-- Każdy element wizualny powinien mieć krótkie wyjaśnienie wzięte ze skryptu
+- Font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+- KRYTYCZNE: JavaScript MUSI być kompletny i działający. Każda funkcja onclick MUSI mieć implementację w tagu <script> PRZED </body>
+- Ogranicz do max 5-6 sekcji/tabów żeby zmieścić się w limicie tokenów
+- Preferuj prostsze ale KOMPLETNE i DZIAŁAJĄCE rozwiązania
+
+**Architektura strony (OBOWIĄZKOWA):**
+1. HEADER — gradient bg (135deg, #0d0d1a → #1a1230 → #0d0d1a), badge z numerem modułu (pill shape, uppercase), duży tytuł z gradient text (-webkit-background-clip: text), subtitle, meta chipy (czas, poziom, numer lekcji)
+2. STICKY NAV TABS — pasek nawigacji (sticky top:0, z-index:100, bg surface), 5-6 przycisków-zakładek z ikonami emoji, active state z border-bottom accent, onclick przełącza sekcje
+3. SEKCJE — każda sekcja to <section> z display:none/block, każda ma section-title (24px, font-weight 800) i section-desc (text-dim, max-width 700px)
+
+**Komponenty wizualne do użycia (wybierz najlepsze dla treści):**
+- PIPELINE/FLOWCHART: poziome kroki z ikonami emoji (36px), numerem, nazwą i opisem. Kliknięcie rozwija detail-card pod spodem z fadeIn animation. Strzałki → między krokami
+- KARTY (cards): bg surface, border border-color, border-radius 16px, padding 28px, hover: border-color accent + translateY(-2px)
+- ANALOGY BOX: gradient bg (rgba accent 0.08), border accent 0.25, label "💡 Analogia" uppercase 11px accent, treść z <em> na wyróżnienia
+- FACT LIST / GRID: grid auto-fit minmax(220px,1fr), każdy item z ikoną, boldem i opisem
+- FORMULA DISPLAY: flex row z formula-part boxes (duża skrót litera accent2, nazwa uppercase accent, opis text-dim) + operatory (×, =, →) między nimi
+- PORÓWNANIE SIDE-BY-SIDE: grid 2 kolumny, karty z labelami (kolorowe), progress bars z wypełnieniem i procentami
+- SVG DIAGRAMY: sieć węzłów z liniami/strzałkami (marker-end), różne rozmiary węzłów = różna ważność, glow filter, legenda
+- SERP MOCKUP: biały box z cieniem, kolorowe elementy (featured=żółty, PAA=zielony, organic=niebieski, local=czerwony), klikalne z info-panel
+- TABY TREŚCI: przyciski z active state (bg accent 0.15, border accent, color accent2), przełączane panele z animacją fadeIn
+- TIMELINE: pionowa linia (gradient accent), dots (kolory wg typu), karty z rokiem, nazwą i opisem, tagi kategorii
+- SUMMARY CARDS: grid, karty z ::before gradient top-border, duży numer (40px, opacity 0.15) w prawym górnym rogu, tytuł + body
+- GLOSSARY GRID: auto-fill minmax(280px,1fr), termin (accent2, bold, z emoji) + definicja jednozdaniowa
+- SCROLL-TO-TOP: fixed bottom-right, okrągły przycisk accent, pojawia się po scroll > 300px
+
+**Interaktywność (JS):**
+- Przełączanie sekcji przez nav tabs (classList add/remove 'active')
+- Klikalne pipeline steps z rozwijaniem detali
+- Tabbed content (patologie, kategorie itp.)
+- Hover effects na kartach (CSS transition)
+- Scroll-to-top button z window.addEventListener('scroll')
+- fadeIn animation: @keyframes fadeIn { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:translateY(0) } }
+
+**Treść:**
+- Wyciągnij ze skryptu WSZYSTKIE: koncepty, definicje, analogie, przykłady, porównania, fakty liczbowe
+- Każda analogia ze skryptu → analogy-box
+- Każda lista faktów → fact-list grid
+- Każde porównanie → side-by-side cards z progress bars
+- Każdy proces → pipeline/flowchart
+- Każda definicja → glossary
 - NIE wymyślaj treści — wszystko musi pochodzić ze skryptu
-- KRYTYCZNE: Jeśli używasz tabów/zakładek, MUSISZ dołączyć kompletny, działający JavaScript na końcu pliku w tagu <script>. Każda funkcja onclick MUSI mieć implementację. Testuj mentalnie czy każdy klik działa.
-- JavaScript MUSI być PRZED zamknięciem </body> i MUSI zawierać ALL funkcje użyte w onclick/oninput
-- Ogranicz liczbę sekcji/tabów do max 5-6 żeby zmieścić się w limicie tokenów
-- Preferuj prostsze, ale KOMPLETNE i DZIAŁAJĄCE rozwiązania zamiast rozbudowanych ale uciętych
+- Na końcu: sekcja podsumowania (5 kluczowych punktów) + słownik pojęć + zapowiedź następnej lekcji
 
 Zwróć TYLKO kod HTML, nic więcej.` }
   ];
