@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI SEO Masterclass — Plan Kursu</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --surface3: #222233;
+    --border: #2a2a3d;
+    --text: #e4e4ef;
+    --text-dim: #8888a0;
+    --accent: #6c5ce7;
+    --accent2: #a29bfe;
+    --green: #00b894;
+    --green-dim: #00b89433;
+    --orange: #fdcb6e;
+    --orange-dim: #fdcb6e33;
+    --red: #e17055;
+    --blue: #74b9ff;
+    --gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header-stats {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .stat { text-align: center; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--accent2); }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); }
+  .progress-bar-container { width: 200px; height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: var(--gradient); border-radius: 3px; transition: width 0.5s ease; }
+  .main { max-width: 1200px; margin: 0 auto; padding: 32px 40px; }
+
+  /* API KEY BAR */
+  .api-bar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .api-bar label { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
+  .api-bar input {
+    flex: 1;
+    min-width: 200px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface3);
+    color: var(--text);
+    font-size: 12px;
+    font-family: monospace;
+    outline: none;
+  }
+  .api-bar input:focus { border-color: var(--accent); }
+  .api-bar .api-status { font-size: 11px; padding: 4px 10px; border-radius: 4px; }
+  .api-bar .api-ok { background: var(--green-dim); color: var(--green); }
+  .api-bar .api-no { background: #e1705533; color: var(--red); }
+
+  /* MODULE */
+  .module {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .module:hover { border-color: var(--accent); }
+  .module-header {
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    user-select: none;
+  }
+  .module-number {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px; flex-shrink: 0;
+  }
+  .module-info { flex: 1; }
+  .module-title { font-size: 17px; font-weight: 700; }
+  .module-meta { font-size: 13px; color: var(--text-dim); margin-top: 2px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .module-progress { display: flex; align-items: center; gap: 8px; }
+  .module-progress-text { font-size: 13px; color: var(--text-dim); min-width: 40px; text-align: right; }
+  .mini-progress { width: 80px; height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+  .mini-progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.4s; }
+  .chevron { width: 20px; height: 20px; color: var(--text-dim); transition: transform 0.3s; flex-shrink: 0; }
+  .module.open .chevron { transform: rotate(90deg); }
+  .module-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .module.open .module-body { max-height: 50000px; }
+  .lessons { padding: 0 24px 20px; }
+
+  /* LESSON */
+  .lesson {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .lesson:hover { border-color: #3a3a5d; }
+  .lesson-header { padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+  .lesson-status {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer; transition: all 0.2s;
+  }
+  .lesson-status:hover { border-color: var(--green); }
+  .lesson-status.done { background: var(--green); border-color: var(--green); }
+  .lesson-status.done::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+  .lesson-title-row { flex: 1; }
+  .lesson-title { font-size: 14px; font-weight: 600; }
+  .lesson-time { font-size: 12px; color: var(--text-dim); }
+  .lesson-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--surface3); color: var(--accent2); border: 1px solid var(--border); white-space: nowrap; }
+  .tag.concept { color: var(--blue); border-color: #74b9ff44; background: #74b9ff11; }
+  .tag.skill { color: var(--green); border-color: #00b89444; background: #00b89411; }
+  .tag.script { color: var(--orange); border-color: #fdcb6e44; background: #fdcb6e11; }
+  .lesson-chevron { width: 16px; height: 16px; color: var(--text-dim); transition: transform 0.2s; flex-shrink: 0; }
+  .lesson.open .lesson-chevron { transform: rotate(90deg); }
+  .lesson-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+  .lesson.open .lesson-body { max-height: 50000px; }
+  .lesson-content { padding: 0 18px 16px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .lesson-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 14px; }
+  .lesson-desc strong { color: var(--text); }
+  .lesson-sections { margin-bottom: 14px; }
+  .lesson-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent2); margin-bottom: 6px; font-weight: 600; }
+  .lesson-section-list { list-style: none; padding: 0; }
+  .lesson-section-list li { font-size: 13px; padding: 3px 0; color: var(--text); position: relative; padding-left: 16px; }
+  .lesson-section-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+
+  /* BUTTONS */
+  .lesson-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .btn {
+    font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--surface3); color: var(--text);
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    position: relative;
+  }
+  .btn:hover { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); }
+  .btn-green { border-color: var(--green); color: var(--green); }
+  .btn-green:hover { background: var(--green); color: #fff; }
+  .btn-orange { border-color: var(--orange); color: var(--orange); }
+  .btn-orange:hover { background: var(--orange); color: var(--bg); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn.has-content { position: relative; }
+  .btn.has-content::after {
+    content: '✓'; position: absolute; top: -6px; right: -6px;
+    width: 16px; height: 16px; border-radius: 50%; background: var(--green);
+    color: #fff; font-size: 10px; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* GENERATED CONTENT PANELS */
+  .generated-panel {
+    margin-top: 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .generated-panel-header {
+    padding: 10px 14px;
+    background: var(--surface3);
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer;
+  }
+  .generated-panel-header h4 { font-size: 13px; font-weight: 600; }
+  .generated-panel-actions { display: flex; gap: 6px; }
+  .generated-panel-actions button {
+    font-size: 11px; padding: 4px 8px; border-radius: 4px;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text-dim);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .generated-panel-actions button:hover { border-color: var(--accent); color: var(--text); }
+  .generated-panel-body {
+    padding: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .generated-panel-body.html-preview {
+    white-space: normal;
+    padding: 0;
+    max-height: 600px;
+  }
+  .generated-panel-body.html-preview iframe {
+    width: 100%; height: 600px; border: none;
+  }
+
+  /* LOADING SPINNER */
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid var(--text-dim);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .streaming-text {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    color: var(--text);
+    white-space: pre-wrap;
+    line-height: 1.7;
+  }
+
+  /* EXERCISE BOX */
+  .exercise-box {
+    background: var(--orange-dim);
+    border: 1px solid #fdcb6e44;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+  }
+  .exercise-box-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+  .exercise-box p { font-size: 13px; color: var(--text); }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; align-items: center; }
+  .filter-btn {
+    font-size: 12px; padding: 6px 12px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-dim);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent2); background: var(--surface2); }
+  .search-input {
+    flex: 1; min-width: 200px; padding: 8px 14px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+    font-size: 13px; outline: none;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+    padding: 12px 20px; border-radius: 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 13px; color: var(--text);
+    transform: translateY(100px); opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--green); }
+  .toast.error { border-color: var(--red); }
+
+  @media (max-width: 768px) {
+    .header { padding: 16px 20px; }
+    .main { padding: 20px; }
+    .header-inner { flex-direction: column; gap: 12px; }
+    .module-header { padding: 14px 16px; }
+    .lessons { padding: 0 16px 16px; }
+    .lesson-tags { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>AI SEO Masterclass — od zera do mistrza</h1>
+      <div style="font-size:12px;color:var(--text-dim);margin-top:4px">Na bazie repozytorium expera-project | Sonnet 4.6: skrypt → strona wizualna (na bazie skryptu)</div>
+    </div>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-value" id="completed-count">0</div><div class="stat-label">Ukończone</div></div>
+      <div class="stat"><div class="stat-value" id="total-count">0</div><div class="stat-label">Lekcji</div></div>
+      <div class="stat"><div class="stat-value" id="generated-count">0</div><div class="stat-label">Wygenerowane</div></div>
+      <div>
+        <div class="progress-bar-container"><div class="progress-bar-fill" id="global-progress" style="width:0%"></div></div>
+        <div style="font-size:11px;color:var(--text-dim);text-align:center;margin-top:4px" id="global-pct">0%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="api-bar">
+    <label>OpenRouter API Key:</label>
+    <input type="password" id="api-key-input" placeholder="sk-or-v1-..." oninput="saveApiKey(this.value)">
+    <span class="api-status" id="api-status"></span>
+    <button class="btn" onclick="document.getElementById('api-key-input').type=document.getElementById('api-key-input').type==='password'?'text':'password'" style="font-size:11px;padding:4px 10px">👁️</button>
+  </div>
+
+  <div class="api-bar">
+    <label>Model (skrypty):</label>
+    <input type="text" id="model-script-input" placeholder="anthropic/claude-sonnet-4-6" oninput="saveModel('script',this.value)" style="flex:0.5">
+    <label>Model (wizualizacje):</label>
+    <input type="text" id="model-visual-input" placeholder="anthropic/claude-sonnet-4-6" oninput="saveModel('visual',this.value)" style="flex:0.5">
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterAll(event)">Wszystkie</button>
+    <button class="filter-btn" onclick="filterByStatus('todo',event)">Do zrobienia</button>
+    <button class="filter-btn" onclick="filterByStatus('done',event)">Ukończone</button>
+    <button class="filter-btn" onclick="filterByStatus('generated',event)">Wygenerowane</button>
+    <input type="text" class="search-input" placeholder="Szukaj lekcji, konceptu, skilla..." oninput="searchLessons(this.value)">
+  </div>
+
+  <div id="modules-container"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ CONFIG ============
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const DEFAULT_MODEL = 'anthropic/claude-sonnet-4-6';
+function getModelScript() { return localStorage.getItem('model_script') || DEFAULT_MODEL; }
+function getModelVisual() { return localStorage.getItem('model_visual') || DEFAULT_MODEL; }
+function saveModel(type, val) { localStorage.setItem(`model_${type === 'script' ? 'script' : 'visual'}`, val); }
+
+// ============ COURSE DATA ============
+const COURSE_DATA = [
+  {
+    id:'m1',number:1,title:'Nowa era wyszukiwania',time:'2h',
+    goal:'Zrozumienie zmiany z "10 niebieskich linków" na AI Search',
+    exercise:'Wyszukaj to samo pytanie w Google i Perplexity. Porównaj wyniki — które strony zostały zacytowane i dlaczego?',
+    lessons:[
+      {id:'l1_1',title:'Jak działał Google do 2024',time:'30 min',
+        concepts:['Crawl→Index→Rank','PageRank','SERP'],skills:[],scripts:[],
+        desc:'Fundamenty klasycznego SEO: jak roboty Google skanują internet, indeksowanie i ranking. Keywords, backlinki, Domain Authority.',
+        points:['Crawl → Index → Rank: 3 etapy klasycznego wyszukiwania','Keywords jako sygnał dopasowania (TF-IDF w praktyce Google)','PageRank — linki jako "głosy zaufania"','Czym jest SERP: organic results, featured snippets, PAA','Ograniczenia starego modelu: keyword stuffing, link farms, thin content']},
+      {id:'l1_2',title:'Jak działa AI Search — RAG od podstaw',time:'45 min',
+        concepts:['RAG','Embeddingi','Baza wektorowa','Cosine Similarity','Chunki'],skills:[],scripts:[],
+        desc:'Kluczowa lekcja kursu. LLM nie "wie" — pobiera informacje z indeksu (RAG). Embeddingi jako "adres w przestrzeni znaczeń", baza wektorowa i cosine similarity.',
+        points:['LLM = dziennikarz, indeks = archiwum, chunki = wycinki z gazet','Embedding: zamiana tekstu na wektor liczbowy (np. 3072 wymiarów)','Baza wektorowa: Supabase pgvector — "biblioteka z adresami"','Cosine similarity: miara bliskości znaczeniowej (0-1)','RAG: Query → embedding → szukaj najbliższych chunków → wstaw do kontekstu → odpowiedź','Sub-queries: AI rozbija pytanie na mniejsze (Query Fanout)','Dlaczego chunk musi być "samodzielny" — autonomia fragmentu']},
+      {id:'l1_3',title:'Co to znaczy dla SEO?',time:'30 min',
+        concepts:['AI Search','Information Density','Chunk Quality','AI Citability'],skills:['content-auditor'],scripts:[],
+        desc:'Nowe reguły gry: nie chodzi o kliknięcie, chodzi o bycie zacytowanym. 8 wymiarów jakości treści. AI Overviews, Perplexity w Polsce.',
+        points:['Zmiana paradygmatu: z "pozycja w SERP" na "bycie źródłem cytatu"','Ruch z AI konwertuje 4× lepiej niż tradycyjny organic','8 wymiarów jakości: CSI, CoR, Density, SRL, TF-IDF, E-E-A-T, Chunk Quality, EAV','AI Overviews w Polsce: jak wpływają na CTR','Perplexity, ChatGPT Search, Gemini — różne mechanizmy, wspólne wymagania','Preview: Content Quality Score (CQS) 0-100']},
+      {id:'l1_4',title:'Architektura narzędzi — co zbudujemy',time:'15 min',
+        concepts:['Pipeline','Skills','Workflow'],skills:[],scripts:[],
+        desc:'Przegląd codebase: 36 skilli, 4 pipeline\'y, 2 główne skrypty. Mapa drogi kursu.',
+        points:['4 pipeline\'y: Planning, Auditing, Semantic Analysis, Research','content_planner.py: 4-krokowy pipeline planowania treści','write_article.py: 9-etapowy pipeline pisania artykułu','Shared libraries: utils.py, senuto_client.py, intent_classifier.py','Dane: Supabase (wektory), Neo4j (graf wiedzy), Senuto (pozycje/wolumeny)']}
+    ]
+  },
+  {
+    id:'m2',number:2,title:'Fundament semantyczny — encje, atrybuty, relacje',time:'2.5h',
+    goal:'Zrozumienie jak AI "widzi" treść — struktury wiedzy zamiast słów kluczowych',
+    exercise:'Wybierz 3 strony produktowe. Dla każdej wyciągnij 5 trójek EAV i sklasyfikuj jako U/R/R.',
+    lessons:[
+      {id:'l2_1',title:'Entity-Attribute-Value (EAV) — język maszyn',time:'45 min',
+        concepts:['EAV','Trójki semantyczne','Entity Recognition'],skills:['eav-extractor'],scripts:[],
+        desc:'AI "widzi" świat jako trójki Encja-Atrybut-Wartość. "Stół spawalniczy | wymiary | 2000×1000mm". Dzięki EAV wyszukiwarki przechodzą od "dopasowywania słów" do "rozumienia faktów".',
+        points:['Encja = atomowa jednostka znaczeniowa (osoba, produkt, koncept)','Atrybut = typ relacji lub właściwość (wymiary, producent)','Wartość = konkretna miara lub węzeł docelowy (2000×1000mm)','EAV ≈ RDF (Subject-Predicate-Object) ≈ JSON-LD','Google NLP API: ekstrakcja encji + confidence score + saliencja','DEMO: skill eav-extractor — wyciąganie trójek z dowolnego tekstu']},
+      {id:'l2_2',title:'Klasyfikacja URR — co wyróżnia Twoją treść',time:'45 min',
+        concepts:['URR','UNIQUE','ROOT','RARE'],skills:['attribute-classifier'],scripts:['classify_urr.py'],
+        desc:'UNIQUE = wyróżnik (tylko Ty), ROOT = oczekiwane (każdy pisze), RARE = niszowe (mała grupa szuka). Kolejność U→R→R to klucz do cytowania.',
+        points:['UNIQUE: atrybut u 1-2 z 10 konkurentów → H1/Lead','ROOT: atrybut u ≥5 → H2 obowiązkowe, "table stakes"','RARE: atrybut u 3-4 → H3/FAQ, wartościowe','Analogia: CV — unikalne osiągnięcia najpierw','Algorytm classify_urr.py: parsuj EAV, licz pokrycie, klasyfikuj','UNIQUE → Information Gain → wyższe cytowanie przez AI']},
+      {id:'l2_3',title:'CSI, Central Entity, Source Context',time:'45 min',
+        concepts:['CSI','Central Entity','Source Context','Search Intent'],skills:['csi-definition-helper'],scripts:[],
+        desc:'CSI = prawdziwa intencja użytkownika. CE = bohater tekstu. SC = kontekst Twojego biznesu. Formuła: CE + SC = CSI.',
+        points:['Central Entity: główna encja artykułu (np. "stół spawalniczy KEMPER")','Test Wikipedii: czy CE mogłaby mieć artykuł na Wikipedii?','Source Context: kim jesteś, co sprzedajesz, co wyróżnia w SERP','CSI = CE + SC + Predicate (co użytkownik chce ZROBIĆ)','Predykaty: kupować, porównywać, poznać, naprawić','Signal Coherence: slug/title/H1/meta = ten sam CSI']},
+      {id:'l2_4',title:'Knowledge Graphs — łączenie kropek',time:'15 min',
+        concepts:['Knowledge Graph','Neo4j','Topical Authority'],skills:[],scripts:['domain_intelligence.py'],
+        desc:'Encje tworzą graf wiedzy. Neo4j w Expera: 1313 encji, 1147 relacji. Topical Authority = pokrycie grafu wokół CE.',
+        points:['Graf wiedzy: encje (węzły) + relacje (krawędzie)','Neo4j: grafowa baza danych, Cypher queries','EAV → Neo4j: Entity=Node, Attribute=Relationship, Value=Property','Topical Authority = głębokość i szerokość pokrycia tematu','domain_intelligence.py: crawl → embeddingi → KG → raport']}
+    ]
+  },
+  {
+    id:'m3',number:3,title:'Analiza semantyczna — jak AI rozumie język',time:'2.5h',
+    goal:'Opanowanie narzędzi lingwistycznych używanych przez AI',
+    exercise:'Przeanalizuj artykuł blogowy: TF-IDF + ramka semantyczna + SRL. Napisz 5 rekomendacji poprawy.',
+    lessons:[
+      {id:'l3_1',title:'TF-IDF — słowa które się liczą',time:'40 min',
+        concepts:['TF-IDF','Term Frequency','Specialist Density'],skills:['tfidf-analyzer'],scripts:[],
+        desc:'TF×IDF: "filtracja HEPA" ma więcej wartości niż "nowoczesne rozwiązanie". Identyfikacja puchu vs terminy branżowe.',
+        points:['TF = częstotliwość w dokumencie, IDF = rzadkość w korpusie','Wysokie TF-IDF: "filtracja HEPA", "prąd spawalniczy"','Niskie TF-IDF: "nowoczesne", "wysokiej jakości"','Puch (fluff) vs fakty: identyfikacja zdań bez wartości','DEMO: skill tfidf-analyzer','Jak content_planner.py i write_article.py używają TF-IDF']},
+      {id:'l3_2',title:'Frame Semantics — ramki znaczeniowe',time:'40 min',
+        concepts:['Frame Semantics','Semantic Frame','Sub-queries'],skills:['frame-semantics'],scripts:[],
+        desc:'Ramka "KUPOWAĆ": Kupujący, Towar, Cena, Miejsce, Cel. Pokrycie ramki = odpowiedzi na sub-queries AI.',
+        points:['15 elementów ramki: Agent, Patient, Instrument, Location, Time, Cause, Purpose...','Ramka generuje sub-queries: "kto kupuje?" "ile kosztuje?"','Pokrycie ramki = Topical Authority','DEMO: skill frame-semantics','Jak content_planner.py używa ramek w step1_topic_research()']},
+      {id:'l3_3',title:'Semantic Role Labels — kto robi co komu',time:'30 min',
+        concepts:['SRL','Agent','Patient','Salience'],skills:['semantic-role-labels-parser'],scripts:[],
+        desc:'Agent, Patient, Instrument. CE powinna być Agentem — najwyższa salience = najwyższe rozpoznanie.',
+        points:['Agent = kto wykonuje akcję (najwyższa salience)','Patient = na czym wykonywana akcja','Instrument = narzędzie akcji','"Stół KEMPER (Agent) zapewnia (Predicate) czystość powietrza (Patient)"','DEMO: skill semantic-role-labels-parser']},
+      {id:'l3_4',title:'Relacje leksykalne — rozszerzanie słów',time:'30 min',
+        concepts:['Synonimy','Hiponimy','Hiperonimy','Meronimy'],skills:['lexical-expander','query-expansion'],scripts:[],
+        desc:'Synonimy, hiponimy, hiperonimy, meronimy, antonimy. Pokrycie relacji leksykalnych poprawia matching z zapytaniami.',
+        points:['Synonimy: odpylacz = odciąg pyłu = filtr pyłowy','Hiponimy (↓): filtracja → HEPA, cyklonowa, elektrostatyczna','Hiperonimy (↑): HEPA → filtracja → oczyszczanie powietrza','Meronimy (części): stół → ruszt, rama, system odciągowy','DEMO: skill lexical-expander + query-expansion']},
+      {id:'l3_5',title:'E-E-A-T — sygnały wiarygodności',time:'30 min',
+        concepts:['E-E-A-T','Experience','Expertise','Authority','Trust'],skills:['eeat-evaluator'],scripts:[],
+        desc:'Experience, Expertise, Authority, Trust. Jak AI ocenia czy treść jest godna cytowania.',
+        points:['Experience: dowody doświadczenia (case studies)','Expertise: kwalifikacje, specjalistyczny język','Authority: cytowania, linki, rozpoznawalność','Trust: transparentność, źródła danych','DEMO: skill eeat-evaluator','CQS: E-E-A-T ma wagę 0.20 (20% score)']}
+    ]
+  },
+  {
+    id:'m4',number:4,title:'Keyword Research nowej generacji',time:'2.5h',
+    goal:'Pipeline od seed keyword do topical map',
+    exercise:'Pełny pipeline: 1 seed → ekspansja → klasteryzacja → nazwy → mapa → gaps.',
+    lessons:[
+      {id:'l4_1',title:'Od seed do listy — ekspansja słów kluczowych',time:'40 min',
+        concepts:['Keyword Expansion','Token Insertion','5W1H'],skills:['keyword-expander','query-expansion'],scripts:[],
+        desc:'Z jednego seed keyword generujemy 300-500 fraz: token insertion, 5W1H, synonyms, SERP enrichment.',
+        points:['Seed keyword → 300-500 unikalnych fraz','Token insertion: "stół spawalniczy" → "stół spawalniczy obrotowy"','5W1H: Kto? Co? Gdzie? Kiedy? Dlaczego? Jak? → 30+ pytań','SERP enrichment: PAA, Related Searches, Refine Chips','DEMO: skill keyword-expander','Output: CSV z keyword, type']},
+      {id:'l4_2',title:'Klasteryzacja po intencji',time:'40 min',
+        concepts:['Klasteryzacja','Embeddingi','K-means','Silhouette Score'],skills:['keyword-clusterer'],scripts:['cluster.py'],
+        desc:'1 klaster intencji = 1 strona. Embeddingi Gemini (3072 dim) + K-means/DBSCAN clustering.',
+        points:['500 fraz → 15-30 grup intencji → 15-30 stron','Embeddingi Gemini: fraza → wektor 3072 wymiarów','K-means: podział na k klastrów','Silhouette Score: jakość klasteryzacji (0-1)','DEMO: cluster.py --visualize → mapa t-SNE']},
+      {id:'l4_3',title:'Nazywanie i walidacja klastrów',time:'30 min',
+        concepts:['Cluster Naming','Canonical Query','SERP Coherence'],skills:['cluster-namer','cluster-validator'],scripts:[],
+        desc:'Każdy klaster: nazwa, CE, canonical query, attribute_type. Walidacja SERP overlap.',
+        points:['cluster-namer: CE, canonical query, attribute type per klaster','attribute_type: main / derived / minor','cluster-validator: SERP overlap >50% = MERGE','Coherence: spójność fraz w klastrze vs Google']},
+      {id:'l4_4',title:'Mapowanie na strukturę serwisu',time:'30 min',
+        concepts:['Topical Map','CORE/OUTER','Pillar Page','Hub-and-Spoke'],skills:['cluster-mapper'],scripts:[],
+        desc:'CORE vs OUTER content. Pillar pages, Entity Home, supporting articles.',
+        points:['CORE: main clusters → pillar pages','OUTER: derived + minor → supporting articles','Entity Home: kanoniczne źródło per CE','Hub-and-Spoke: Pillar ↔ Cluster Pages','DEMO: cluster-mapper → topical map']},
+      {id:'l4_5',title:'Content Gap Detection',time:'30 min',
+        concepts:['Content Gaps','Information Gain','P0-P4'],skills:['content-gap-detector'],scripts:[],
+        desc:'Co SERP ma a Ty nie? Information Gain = nowa wartość ponad dane treningowe LLM.',
+        points:['P0: Information Gain — SERP ma, LLM nie zna','P1-P4: gaps klasyfikowane wg pokrycia','UNIQUE keywords: w klastrach, nieobecne w SERP','DEMO: content-gap-detector','Priorytetyzacja: co pisać najpierw']}
+    ]
+  },
+  {
+    id:'m5',number:5,title:'Content Planning Pipeline — content_planner.py',time:'2.5h',
+    goal:'Opanowanie 4-krokowego pipeline\'u planowania treści',
+    exercise:'Wygeneruj 3 kompletne briefy dla 3 tematów z topical map.',
+    lessons:[
+      {id:'l5_1',title:'Query Fanout — jak AI rozbija pytanie',time:'30 min',
+        concepts:['Query Fanout','Sub-queries','SERP Grounding'],skills:['query-fanout'],scripts:['content_planner.py'],
+        desc:'Krok 0: 1 pytanie → 5-10 sub-queries. Typy dekompozycji. SERP grounding: CONFIRMED vs PREDICTED.',
+        points:['Mechanizm: "stoły spawalnicze" → "wymiary" + "ceny" + "producenci"','NodeHub API: warianty z confidence score','Typy: specification, reformulation, implicit, comparative','Output: 00_query_fanout.json','Funkcja: nodeshub_query_fanout()','Pokrycie sub-queries = kompletne źródło']},
+      {id:'l5_2',title:'Topic Research — pełna analiza tematu',time:'40 min',
+        concepts:['CSI Definition','Semantic Frame','Lexical Relations','Contextual Vectors'],skills:['topic-researcher'],scripts:['content_planner.py'],
+        desc:'Krok 1: CSI definition, 15-elementowa ramka, 7-12 sub-queries, relacje leksykalne.',
+        points:['CSI: CE + SC + Predicate + Canonical Query','Semantic Frame: 15 elementów','Sub-queries: 7-12 z priorytetem P1/P2/P3','Lexical Relations: 6 typów','Output: 01_topic_research.md','Funkcja: step1_topic_research()']},
+      {id:'l5_3',title:'Competitor Gap Analysis — co ma konkurencja',time:'40 min',
+        concepts:['SERP Analysis','EAV Extraction','URR Classification','Content Gaps P1-P4'],skills:['competitor-gap-analyzer','nodeshub-search','jina-reader'],scripts:['content_planner.py'],
+        desc:'Krok 2: SERP scraping → crawling → EAV extraction → URR → gap analysis P1-P4.',
+        points:['NodeHub: top 10 + PAA + Related Searches','crawl4ai: PruningContentFilter, usuwanie boilerplate','Parallel crawling: max 3, timeout 30s','EAV extraction z treści konkurencji','URR: ≥5=ROOT, 3-4=RARE, 1-2=UNIQUE','Gap Analysis: P1 (krytyczne) → P4','Output: 02_competitor_analysis.md']},
+      {id:'l5_4',title:'Contextual Vector — struktura artykułu',time:'30 min',
+        concepts:['URR→H2/H3 Mapping','BLUF','Atomic Passages','Chunk Autonomy'],skills:['contextual-vector-builder'],scripts:['content_planner.py'],
+        desc:'Krok 3: URR→hierarchia nagłówków. BLUF per sekcja. Chunki 200-500 słów.',
+        points:['UNIQUE → pierwsze H2','ROOT → obowiązkowe H2','RARE → H3/FAQ','BLUF: odpowiedź w pierwszych 50 słowach','Atomic Passage: 200-500 słów, 2×CE per chunk','Output: 03_contextual_vector.md']},
+      {id:'l5_5',title:'Content Brief — gotowy dokument',time:'30 min',
+        concepts:['Content Brief','15-point Checklist','Signal Coherence'],skills:['content-brief-generator'],scripts:['content_planner.py'],
+        desc:'Krok 4: 9-sekcyjny brief: CSI, EAV Matrix, gaps, struktura, checklist, keywords.',
+        points:['Brief ≠ artykuł — instrukcja z metrykami','9 sekcji: CSI, EAV, Gaps, Struktura, Coherence, Metryki, Checklist, UNIQUE, Keywords','15-point copywriter checklist','Resume/idempotency: skip jeśli output istnieje','Output: brief.md — główny deliverable']}
+    ]
+  },
+  {
+    id:'m6',number:6,title:'Content Writing Pipeline — write_article.py',time:'2.5h',
+    goal:'Opanowanie 9-etapowego pipeline\'u pisania artykułu',
+    exercise:'Weź brief z Modułu 5, przepuść przez write_article.py. Porównaj przed i po humanizacji.',
+    lessons:[
+      {id:'l6_1',title:'Brief parsing i sekcyjne pisanie',time:'40 min',
+        concepts:['Brief Parsing','Section-by-section Writing','Context Accumulation','Retry Loop'],skills:[],scripts:['write_article.py'],
+        desc:'Dlaczego H2 po H2, nie cały naraz: kontrola per sekcja, narastający kontekst, retry z eskalacją temperatury.',
+        points:['parse_sections_from_brief(): regex wyciąga H1/H2/H3 + metadata','Sekcyjne pisanie: 1 sekcja → walidacja → następna','Context accumulation: każda sekcja "widzi" poprzednie','Retry loop (0-3×): +0.05°C na retry','validate_section(): word count, TF-IDF, inline H3s','Output: article_raw.html']},
+      {id:'l6_2',title:'Post-assembly i globalna walidacja TF-IDF',time:'30 min',
+        concepts:['Post-assembly','Global TF-IDF','Artifact Removal'],skills:[],scripts:['write_article.py'],
+        desc:'Czyszczenie artefaktów LLM. Globalne sprawdzenie TF-IDF: każdy termin ≥ min count.',
+        points:['post_assembly_cleanup(): dedup H1, empty <p>, limit newlines','_clean_llm_html(): strip code blocks, DOCTYPE','check_global_tfidf(): termin ≥ min count w całym artykule','Globalne sprawdzenie: sekcja A pokrywa terminy sekcji B']},
+      {id:'l6_3',title:'T3F4 — optymalizacja copywriterska',time:'30 min',
+        concepts:['Copywriting','Readability','Persuasion'],skills:[],scripts:['write_article.py'],
+        desc:'Czytelność, struktura, perswazja. SEO ≠ copywriting, oba muszą być dobre.',
+        points:['T3F4 = kontrola jakości copywriterskiej','Sprawdza: czytelność (Gunning Fog), długość zdań','Subprocess: T3F4-article_check_educational.py','Output: article_checked.html']},
+      {id:'l6_4',title:'T3F5 — humanizacja AI',time:'30 min',
+        concepts:['AI Humanization','AI Detection','Pattern Removal'],skills:[],scripts:['write_article.py'],
+        desc:'Usuwanie patternów AI. Co humanizacja może zepsuć: FAQ, nagłówki, precyzję terminów.',
+        points:['AI patterns: "Warto zauważyć, że...", "Podsumowując..."','T3F5: humanizacja w kontekście polskiego języka','Ryzyko: parafrazuje pytania FAQ (niszczy snippets)','Ryzyko: zmienia nagłówki H2/H3','Dlatego potrzebny repair']},
+      {id:'l6_5',title:'Post-humanization repair i final audit',time:'30 min',
+        concepts:['FAQ Transplant','Heading Fix','Final Audit','Internal Linking'],skills:[],scripts:['write_article.py','link_article.py'],
+        desc:'FAQ transplant, heading fix, final check Claude (score 1-10). Linkowanie wewnętrzne przez embeddingi.',
+        points:['_transplant_faq_from_raw(): podmiana FAQ z pre-humanization','_fix_heading_hierarchy(): przywrócenie H2/H3','final_check_vs_brief(): Claude, score 1-10','html_to_markdown(): konwersja do Markdown','link_article.py: cosine similarity → LLM wstrzykuje linki','Output: article_final.md + final_check_report.md']}
+    ]
+  },
+  {
+    id:'m7',number:7,title:'Content Auditing — mierzenie jakości',time:'2h',
+    goal:'Ocena i optymalizacja istniejących treści pod AI Search',
+    exercise:'Pełny audyt 3 artykułów. CQS score, TOP 3 problemy, rekomendacje BEFORE/AFTER.',
+    lessons:[
+      {id:'l7_1',title:'Pełny audyt 8-wymiarowy',time:'40 min',
+        concepts:['CQS','AI Citability Score','BEFORE/AFTER'],skills:['content-auditor','audit-report-generator'],scripts:[],
+        desc:'CQS 0-100: CSI×0.25 + CoR×0.20 + Density×0.15 + SRL×0.10 + TF-IDF×0.10 + EEAT×0.20. Raport BEFORE/AFTER.',
+        points:['CQS formuła: 6 wymiarów z wagami → score 0-100','AI Citability Score 0-10','content-auditor: 8 wymiarów + fragments','audit-report-generator: dashboard + BEFORE/AFTER','Docelowa struktura: [OK]/[ZMIEŃ]/[NOWA]']},
+      {id:'l7_2',title:'Information Density i BLUF',time:'30 min',
+        concepts:['Information Density','BLUF','FAKT/OPINIA/PUCH'],skills:['information-density-checker','bluf-generator'],scripts:[],
+        desc:'Stosunek faktów do puchu: FAKT (+1), OPINIA (0), PUCH (-1). BLUF: odpowiedź w pierwszych 50 słowach H2.',
+        points:['Density Score: FAKT / wszystkie zdania','Konkretność: (liczby + encje) / (modifiers + przymiotniki)','Transformacje NISKA → WYSOKA gęstość','BLUF: Answer → Evidence → Context','DEMO: information-density-checker + bluf-generator']},
+      {id:'l7_3',title:'Chunk Optimization i Cost of Retrieval',time:'30 min',
+        concepts:['Chunk Optimization','Cost of Retrieval','Autonomy'],skills:['chunk-optimizer','cost-of-retrieval-optimizer'],scripts:[],
+        desc:'Jak AI "tnie" tekst na chunki. CoR = koszt obliczeniowy ekstrakcji. Im niższy, tym lepiej.',
+        points:['Chunk = ~200-500 słów (1 sekcja H2)','Autonomia: czy chunk ma sens sam?','CoR: Low (dobrze) / Medium / High (źle)','Obniżające CoR: tabele, listy, definicje','Podwyższające CoR: długa proza, brak nagłówków','Target: ID Score ≥0.8 per H2']},
+      {id:'l7_4',title:'CSI Alignment i Signal Coherence',time:'20 min',
+        concepts:['CSI Alignment','Signal Coherence','Semantic Drift'],skills:['csi-alignment-checker'],scripts:[],
+        desc:'Czy slug/title/H1/meta mówią to samo? Signal Coherence = spójność sygnałów.',
+        points:['Signal Coherence: slug + title + H1 + meta = ten sam CSI','CSI Alignment Score 0-10','EAV coverage: artykuł vs SERP top 10','Semantic Drift: cosine similarity z oryginalnym CSI']}
+    ]
+  },
+  {
+    id:'m8',number:8,title:'Pełna strategia — od domeny do systemu publikacji',time:'2.5h',
+    goal:'Połączenie wszystkiego w kompletny, skalowalny workflow',
+    exercise:'PROJEKT KOŃCOWY: Strategia contentowa — CE/SC/CSI, keyword research, topical map, 3 briefy, 1 artykuł, audyt.',
+    lessons:[
+      {id:'l8_1',title:'Domain Intelligence — analiza całej domeny',time:'40 min',
+        concepts:['Domain Analysis','Knowledge Graph Building'],skills:[],scripts:['domain_intelligence.py','index_expera.py'],
+        desc:'Crawl → embeddingi → Neo4j KG → Senuto → raport. 141 stron, 1313 encji w Expera.',
+        points:['domain_intelligence.py scan: crawl + analiza','Embeddingi: strona → wektor 3072 dim w Supabase','Neo4j: encje i relacje → graf wiedzy','Senuto: pozycje, wolumeny, trendy','index_expera.py: indeksowanie stron','Output: domain_report.md']},
+      {id:'l8_2',title:'Topical Authority Planning',time:'30 min',
+        concepts:['Topical Authority','Hub-and-Spoke','Priority'],skills:[],scripts:['topical_authority_planner.py'],
+        desc:'Agregacja 5 źródeł danych. Hub-and-spoke. Priorytetyzacja: co pisać najpierw.',
+        points:['topical_authority_planner.py: Senuto + KG + embeddingi + gaps','Hub-and-Spoke: Pillar ↔ Cluster Pages','Priorytetyzacja: P0 > P1 > P2-P4','Topical map → content calendar']},
+      {id:'l8_3',title:'Batch production — skalowanie',time:'30 min',
+        concepts:['Batch Processing','Quality at Scale'],skills:[],scripts:['batch_briefs.py'],
+        desc:'Briefy i artykuły hurtowo. Jak utrzymać jakość przy skali.',
+        points:['batch_briefs.py: wiele briefów z topical map','Pipeline w pętli: planner → writer','Quality gate: CQS ≥ 70','Throughput: ~3-5 artykułów/dzień']},
+      {id:'l8_4',title:'Linkowanie wewnętrzne przez embeddingi',time:'20 min',
+        concepts:['Semantic Linking','Cosine Similarity'],skills:[],scripts:['link_article.py'],
+        desc:'Cosine similarity w Supabase → LLM wstrzykuje linki kontekstowe.',
+        points:['link_article.py: szukaj najbliższych stron','Cosine similarity: semantyczne dopasowanie','LLM wstrzykuje: naturalny anchor text','Eliminacja orphan pages']},
+      {id:'l8_5',title:'Monitoring i iteracja',time:'30 min',
+        concepts:['Monitoring','Iteration','Continuous Improvement'],skills:[],scripts:[],
+        desc:'Senuto MCP: pozycje, wolumeny. Kiedy re-audyt. Podsumowanie kursu.',
+        points:['Senuto MCP: bieżące dane','Kiedy re-audyt: spadek pozycji, nowa konkurencja','NotebookLM: baza wiedzy Semantic SEO','Pełny workflow: seed → klastry → mapa → briefy → artykuły → audyt → publikacja → monitoring']}
+    ]
+  }
+];
+
+// ============ API ============
+function getApiKey() {
+  return localStorage.getItem('openrouter_api_key') || '';
+}
+
+function saveApiKey(val) {
+  localStorage.setItem('openrouter_api_key', val);
+  updateApiStatus();
+}
+
+function updateApiStatus() {
+  const key = getApiKey();
+  const el = document.getElementById('api-status');
+  if (key && key.startsWith('sk-or-')) {
+    el.className = 'api-status api-ok';
+    el.textContent = 'Klucz zapisany';
+  } else if (key) {
+    el.className = 'api-status api-no';
+    el.textContent = 'Nieprawidłowy format';
+  } else {
+    el.className = 'api-status api-no';
+    el.textContent = 'Brak klucza';
+  }
+}
+
+// ============ STORAGE ============
+function getProgress() { return JSON.parse(localStorage.getItem('course_progress') || '{}'); }
+function getGenerated() { return JSON.parse(localStorage.getItem('course_generated') || '{}'); }
+function saveGenerated(key, value) {
+  const g = getGenerated();
+  g[key] = value;
+  localStorage.setItem('course_generated', JSON.stringify(g));
+}
+function getStatus(id) { return getProgress()[id] || false; }
+
+function toggleStatus(id) {
+  const p = getProgress();
+  p[id] = !p[id];
+  localStorage.setItem('course_progress', JSON.stringify(p));
+  renderAll();
+}
+
+// ============ STREAMING API CALL ============
+async function streamGenerate(model, messages, onChunk, onDone) {
+  const key = getApiKey();
+  if (!key) { toast('Wpisz OpenRouter API Key!', 'error'); return; }
+
+  const resp = await fetch(OPENROUTER_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${key}`,
+      'HTTP-Referer': 'http://localhost',
+    },
+    body: JSON.stringify({
+      model,
+      messages,
+      stream: true,
+      max_tokens: 16000,
+      temperature: 0.7,
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`API Error ${resp.status}: ${err}`);
+  }
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let full = '';
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    const lines = buffer.split('\n');
+    buffer = lines.pop();
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6).trim();
+      if (data === '[DONE]') continue;
+      try {
+        const json = JSON.parse(data);
+        const delta = json.choices?.[0]?.delta?.content;
+        if (delta) {
+          full += delta;
+          onChunk(full);
+        }
+      } catch(e) {}
+    }
+  }
+  onDone(full);
+  return full;
+}
+
+// ============ PROMPT BUILDERS ============
+function findLesson(id) {
+  for (const mod of COURSE_DATA) {
+    for (const l of mod.lessons) {
+      if (l.id === id) return { lesson: l, module: mod };
+    }
+  }
+}
+
+function buildScriptPrompt(lesson, module) {
+  return [
+    { role: 'system', content: `Jesteś profesjonalnym twórcą kursów online o AI i SEO. Piszesz po polsku. Tworzysz skrypty lekcji gotowe do przeczytania na głos (nagranie wideo). Styl: profesjonalny, przystępny, z analogiami. Używasz markdown.` },
+    { role: 'user', content: `Napisz PEŁNY skrypt lekcji do przeczytania na głos:
+
+**Kurs:** AI SEO Masterclass — od zera do mistrza
+**Moduł ${module.number}:** ${module.title}
+**Lekcja:** ${lesson.title} (${lesson.time})
+**Opis:** ${lesson.desc}
+
+**Punkty do omówienia:**
+${lesson.points.map((p,i) => `${i+1}. ${p}`).join('\n')}
+
+**Skille do demonstracji:** ${lesson.skills.join(', ') || 'brak'}
+**Skrypty:** ${lesson.scripts.join(', ') || 'brak'}
+
+**Wytyczne:**
+- Język przystępny dla osób nietechnicznych
+- Używaj analogii i przykładów z życia (np. spawalnictwo, produkcja, BHP)
+- Zaznacz miejsca na demo: [DEMO: opis]
+- Zaznacz miejsca na grafikę: [SLAJD: opis]
+- Zacznij od hooka — dlaczego ta lekcja jest ważna
+- Kończ podsumowaniem i zapowiedzią następnej lekcji
+- Długość: ~${parseInt(lesson.time) * 150} słów
+
+**Kontekst wiedzy:**
+- EAV = Entity-Attribute-Value, trójki semantyczne
+- URR = Unique/Root/Rare classification
+- CSI = Central Search Intent (CE + SC + Predicate)
+- RAG = Retrieval Augmented Generation
+- BLUF = Bottom Line Up Front
+- CQS = Content Quality Score (0-100)
+- Ruch z AI konwertuje 4× lepiej niż tradycyjny organic
+- Entity Clarity = najważniejszy czynnik cytowania przez LLM
+- Projekt bazowy: expera.com.pl (systemy filtracji powietrza, stoły spawalnicze)
+- Repozytorium ma 36 skilli AI SEO i 2 główne pipeline'y
+
+Skrypt gotowy do przeczytania — pełne zdania, naturalna mowa, formatowanie markdown.` }
+  ];
+}
+
+function buildVisualPrompt(lesson, module, scriptContent) {
+  return [
+    { role: 'system', content: `Jesteś ekspertem frontend developmentu tworzącym interaktywne wizualizacje edukacyjne. Tworzysz single-file HTML z inline CSS i JS. Dark theme (#0a0a0f bg, #e4e4ef text, #6c5ce7 accent). Nowoczesny, premium look. Polski język. MUSISZ zwrócić TYLKO poprawny HTML zaczynający się od <!DOCTYPE html> — bez wyjaśnień, bez markdown, czysty HTML.` },
+    { role: 'user', content: `Stwórz kompletną, samodzielną stronę HTML, która WIZUALNIE przedstawia najważniejsze koncepty z poniższego skryptu lekcji.
+
+**Lekcja:** ${lesson.title}
+**Moduł ${module.number}:** ${module.title}
+
+---
+**SKRYPT LEKCJI (źródło treści — strona musi odpowiadać dokładnie temu co jest w skrypcie):**
+
+${scriptContent}
+
+---
+
+**Wymagania:**
+- Single HTML file, all CSS and JS inline
+- Dark theme: bg #0a0a0f, text #e4e4ef, accent #6c5ce7, accent2 #a29bfe, green #00b894
+- Responsive, wygląda świetnie na 1920×1080
+- Interaktywne: klikalne kroki, animacje CSS, efekty hover
+- Diagramy/wykresy w SVG lub CSS (bez zewnętrznych obrazów)
+- Font: system fonts (Inter, -apple-system)
+- Header z tytułem lekcji i numerem modułu
+- Wybierz NAJLEPSZY typ wizualizacji dla treści skryptu:
+  * Flowchart/pipeline (jeśli proces)
+  * Interaktywna tabela/macierz (jeśli klasyfikacja)
+  * Animowany diagram (jeśli mechanizm)
+  * Porównanie Before/After (jeśli optymalizacja)
+  * Klikalna mapa (jeśli architektura)
+- Wyciągnij ze skryptu KLUCZOWE koncepty, definicje, analogie i przykłady — przedstaw je wizualnie
+- Każdy element wizualny powinien mieć krótkie wyjaśnienie wzięte ze skryptu
+- NIE wymyślaj treści — wszystko musi pochodzić ze skryptu
+
+Zwróć TYLKO kod HTML, nic więcej.` }
+  ];
+}
+
+// ============ GENERATE HANDLERS ============
+async function generateScript(id) {
+  const { lesson, module } = findLesson(id);
+  const storageKey = `script_${id}`;
+  const existing = getGenerated()[storageKey];
+
+  // If already generated, just toggle visibility
+  const panel = document.getElementById(`panel-script-${id}`);
+  if (existing && panel) {
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'block';
+    panel.querySelector('.generated-panel-body').textContent = existing;
+    return;
+  }
+
+  const btn = document.querySelector(`#btn-script-${id}`);
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generuję (Sonnet 4.6)...'; }
+
+  // Create/show panel
+  ensurePanel(id, 'script', '📝 Skrypt lekcji (Sonnet 4.6)');
+  const bodyEl = document.getElementById(`panel-script-${id}`).querySelector('.generated-panel-body');
+  bodyEl.className = 'generated-panel-body streaming-text';
+
+  try {
+    const messages = buildScriptPrompt(lesson, module);
+    await streamGenerate(getModelScript(), messages,
+      (text) => { bodyEl.textContent = text; bodyEl.scrollTop = bodyEl.scrollHeight; },
+      (final) => {
+        saveGenerated(storageKey, final);
+        if (btn) { btn.disabled = false; btn.innerHTML = '📝 Skrypt lekcji'; btn.classList.add('has-content'); }
+        toast('Skrypt wygenerowany!', 'success');
+        updateGlobalStats();
+      }
+    );
+  } catch(e) {
+    bodyEl.textContent = 'Błąd: ' + e.message;
+    if (btn) { btn.disabled = false; btn.innerHTML = '📝 Generuj skrypt'; }
+    toast('Błąd API: ' + e.message, 'error');
+  }
+}
+
+async function generateSlide(id) {
+  const { lesson, module } = findLesson(id);
+  const storageKey = `slide_${id}`;
+  const existing = getGenerated()[storageKey];
+
+  const panel = document.getElementById(`panel-slide-${id}`);
+  if (existing && panel) {
+    panel.style.display = 'block';
+    renderSlidePreview(id, existing);
+    return;
+  }
+
+  // Require script first
+  const scriptContent = getGenerated()[`script_${id}`];
+  if (!scriptContent) {
+    toast('Najpierw wygeneruj skrypt lekcji!', 'error');
+    return;
+  }
+
+  const btn = document.querySelector(`#btn-slide-${id}`);
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generuję (Sonnet 4.6)...'; }
+
+  ensurePanel(id, 'slide', '🖥️ Strona wizualna (Sonnet 4.6 — z skryptu)');
+  const bodyEl = document.getElementById(`panel-slide-${id}`).querySelector('.generated-panel-body');
+  bodyEl.className = 'generated-panel-body streaming-text';
+
+  try {
+    const messages = buildVisualPrompt(lesson, module, scriptContent);
+    await streamGenerate(getModelVisual(), messages,
+      (text) => { bodyEl.textContent = text.substring(text.length - 500); bodyEl.scrollTop = bodyEl.scrollHeight; },
+      (final) => {
+        // Extract HTML from response (might have markdown wrapping)
+        let html = final;
+        const match = final.match(/```html\s*([\s\S]*?)```/);
+        if (match) html = match[1];
+        else if (!final.trim().startsWith('<!DOCTYPE') && !final.trim().startsWith('<html')) {
+          // Try to find HTML in the response
+          const start = final.indexOf('<!DOCTYPE');
+          if (start >= 0) html = final.substring(start);
+        }
+
+        saveGenerated(storageKey, html);
+        renderSlidePreview(id, html);
+        if (btn) { btn.disabled = false; btn.innerHTML = '🖥️ Strona wizualna'; btn.classList.add('has-content'); }
+        toast('Strona wizualna wygenerowana (na bazie skryptu)!', 'success');
+        updateGlobalStats();
+      }
+    );
+  } catch(e) {
+    bodyEl.textContent = 'Błąd: ' + e.message;
+    if (btn) { btn.disabled = false; btn.innerHTML = '🖥️ Generuj stronę'; }
+    toast('Błąd API: ' + e.message, 'error');
+  }
+}
+
+function renderSlidePreview(id, html) {
+  const bodyEl = document.getElementById(`panel-slide-${id}`).querySelector('.generated-panel-body');
+  bodyEl.className = 'generated-panel-body html-preview';
+  const iframe = document.createElement('iframe');
+  iframe.sandbox = 'allow-scripts';
+  bodyEl.innerHTML = '';
+  bodyEl.appendChild(iframe);
+  iframe.srcdoc = html;
+}
+
+function ensurePanel(id, type, title) {
+  const containerId = `panels-${id}`;
+  let container = document.getElementById(containerId);
+  if (!container) {
+    const lessonContent = document.querySelector(`#lesson-${id} .lesson-content`);
+    container = document.createElement('div');
+    container.id = containerId;
+    lessonContent.appendChild(container);
+  }
+
+  let panel = document.getElementById(`panel-${type}-${id}`);
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = `panel-${type}-${id}`;
+    panel.className = 'generated-panel';
+    panel.innerHTML = `
+      <div class="generated-panel-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+        <h4>${title}</h4>
+        <div class="generated-panel-actions">
+          <button onclick="event.stopPropagation();copyPanel('${type}_${id}')">Kopiuj</button>
+          <button onclick="event.stopPropagation();openInNewTab('${type}_${id}')">Nowa karta</button>
+          <button onclick="event.stopPropagation();regenerate('${id}','${type}')">Regeneruj</button>
+          <button onclick="event.stopPropagation();deleteGenerated('${id}','${type}')">Usuń</button>
+        </div>
+      </div>
+      <div class="generated-panel-body"></div>
+    `;
+    container.appendChild(panel);
+  }
+  panel.style.display = 'block';
+  return panel;
+}
+
+function copyPanel(key) {
+  const content = getGenerated()[key];
+  if (content) {
+    navigator.clipboard.writeText(content);
+    toast('Skopiowano!', 'success');
+  }
+}
+
+function openInNewTab(key) {
+  const content = getGenerated()[key];
+  if (!content) return;
+  if (key.startsWith('slide_')) {
+    const w = window.open();
+    w.document.write(content);
+    w.document.close();
+  } else {
+    const w = window.open();
+    w.document.write(`<html><head><meta charset="UTF-8"><title>Skrypt</title><style>body{font-family:Inter,sans-serif;max-width:800px;margin:40px auto;padding:0 20px;background:#0a0a0f;color:#e4e4ef;line-height:1.8;white-space:pre-wrap;}</style></head><body>${content.replace(/</g,'&lt;')}</body></html>`);
+    w.document.close();
+  }
+}
+
+function regenerate(id, type) {
+  const key = `${type}_${id}`;
+  const g = getGenerated();
+  delete g[key];
+  localStorage.setItem('course_generated', JSON.stringify(g));
+  const panel = document.getElementById(`panel-${type}-${id}`);
+  if (panel) panel.remove();
+  if (type === 'script') generateScript(id);
+  else generateSlide(id);
+}
+
+function deleteGenerated(id, type) {
+  const key = `${type}_${id}`;
+  const g = getGenerated();
+  delete g[key];
+  localStorage.setItem('course_generated', JSON.stringify(g));
+  const panel = document.getElementById(`panel-${type}-${id}`);
+  if (panel) panel.remove();
+  const btn = document.querySelector(`#btn-${type}-${id}`);
+  if (btn) btn.classList.remove('has-content');
+  toast('Usunięto', 'success');
+  updateGlobalStats();
+}
+
+// ============ TOAST ============
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ============ RENDERING ============
+function chevronSVG(cls) {
+  return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`;
+}
+
+function renderTags(lesson) {
+  let h = '';
+  lesson.concepts.forEach(c => h += `<span class="tag concept">${c}</span>`);
+  lesson.skills.forEach(s => h += `<span class="tag skill">${s}</span>`);
+  lesson.scripts.forEach(s => h += `<span class="tag script">${s}</span>`);
+  return h;
+}
+
+function renderLesson(lesson) {
+  const done = getStatus(lesson.id);
+  const gen = getGenerated();
+  const hasScript = !!gen[`script_${lesson.id}`];
+  const hasSlide = !!gen[`slide_${lesson.id}`];
+
+  return `
+    <div class="lesson" id="lesson-${lesson.id}" data-id="${lesson.id}">
+      <div class="lesson-header" onclick="toggleLesson('${lesson.id}')">
+        <div class="lesson-status ${done?'done':''}" onclick="event.stopPropagation();toggleStatus('${lesson.id}')"></div>
+        <div class="lesson-title-row">
+          <div class="lesson-title">${lesson.title}</div>
+          <div class="lesson-time">${lesson.time}${hasScript?' ✅ skrypt':''}${hasSlide?' ✅ strona':''}</div>
+        </div>
+        <div class="lesson-tags">${renderTags(lesson)}</div>
+        ${chevronSVG('lesson-chevron')}
+      </div>
+      <div class="lesson-body">
+        <div class="lesson-content">
+          <div class="lesson-desc">${lesson.desc}</div>
+          <div class="lesson-sections">
+            <div class="lesson-section-title">Punkty do omówienia</div>
+            <ul class="lesson-section-list">${lesson.points.map(p=>`<li>${p}</li>`).join('')}</ul>
+          </div>
+          ${lesson.skills.length?`<div class="lesson-sections"><div class="lesson-section-title">Skille</div><ul class="lesson-section-list">${lesson.skills.map(s=>`<li><strong>${s}</strong></li>`).join('')}</ul></div>`:''}
+          <div class="lesson-actions">
+            <button class="btn btn-primary ${hasScript?'has-content':''}" id="btn-script-${lesson.id}" onclick="event.stopPropagation();generateScript('${lesson.id}')">📝 ${hasScript?'Skrypt lekcji':'Generuj skrypt'}</button>
+            <button class="btn btn-green ${hasSlide?'has-content':''}" id="btn-slide-${lesson.id}" onclick="event.stopPropagation();generateSlide('${lesson.id}')">🖥️ ${hasSlide?'Strona wizualna':'Generuj stronę'}</button>
+          </div>
+          <div id="panels-${lesson.id}"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderModule(mod) {
+  const lessons = mod.lessons;
+  const done = lessons.filter(l => getStatus(l.id)).length;
+  const pct = Math.round((done / lessons.length) * 100);
+  return `
+    <div class="module" id="module-${mod.id}">
+      <div class="module-header" onclick="toggleModule('${mod.id}')">
+        <div class="module-number">${mod.number}</div>
+        <div class="module-info">
+          <div class="module-title">${mod.title}</div>
+          <div class="module-meta">
+            <span>${mod.time}</span>
+            <span>${lessons.length} lekcji</span>
+            <span style="font-style:italic">${mod.goal}</span>
+          </div>
+        </div>
+        <div class="module-progress">
+          <div class="mini-progress"><div class="mini-progress-fill" style="width:${pct}%"></div></div>
+          <div class="module-progress-text">${done}/${lessons.length}</div>
+        </div>
+        ${chevronSVG('chevron')}
+      </div>
+      <div class="module-body">
+        <div class="lessons">
+          ${lessons.map(renderLesson).join('')}
+          <div class="exercise-box">
+            <div class="exercise-box-title">Ćwiczenie modułowe</div>
+            <p>${mod.exercise}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAll() {
+  document.getElementById('modules-container').innerHTML = COURSE_DATA.map(renderModule).join('');
+  updateGlobalStats();
+  restoreGeneratedPanels();
+}
+
+function restoreGeneratedPanels() {
+  const gen = getGenerated();
+  for (const key of Object.keys(gen)) {
+    const [type, id] = [key.startsWith('script_') ? 'script' : 'slide', key.replace(/^(script_|slide_)/, '')];
+    // Only restore panels for open lessons (lazy)
+  }
+}
+
+function updateGlobalStats() {
+  const all = COURSE_DATA.flatMap(m => m.lessons);
+  const done = all.filter(l => getStatus(l.id)).length;
+  const gen = getGenerated();
+  const genCount = Object.keys(gen).length;
+  document.getElementById('completed-count').textContent = done;
+  document.getElementById('total-count').textContent = all.length;
+  document.getElementById('generated-count').textContent = genCount;
+  const pct = Math.round((done / all.length) * 100);
+  document.getElementById('global-progress').style.width = pct + '%';
+  document.getElementById('global-pct').textContent = pct + '%';
+}
+
+// ============ TOGGLE & FILTER ============
+function toggleModule(id) { document.getElementById('module-'+id).classList.toggle('open'); }
+function toggleLesson(id) {
+  const el = document.getElementById('lesson-'+id);
+  el.classList.toggle('open');
+  // Lazy-load generated panels
+  if (el.classList.contains('open')) {
+    const gen = getGenerated();
+    if (gen[`script_${id}`] && !document.getElementById(`panel-script-${id}`)) {
+      ensurePanel(id, 'script', '📝 Skrypt lekcji (Sonnet 4.6)');
+      const body = document.getElementById(`panel-script-${id}`).querySelector('.generated-panel-body');
+      body.className = 'generated-panel-body streaming-text';
+      body.textContent = gen[`script_${id}`];
+    }
+    if (gen[`slide_${id}`] && !document.getElementById(`panel-slide-${id}`)) {
+      ensurePanel(id, 'slide', '🖥️ Strona wizualna (Sonnet 4.6 — z skryptu)');
+      renderSlidePreview(id, gen[`slide_${id}`]);
+    }
+  }
+}
+
+function filterAll(e) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  document.querySelectorAll('.module,.lesson').forEach(el=>el.style.display='');
+}
+
+function filterByStatus(status, e) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  const gen = getGenerated();
+  document.querySelectorAll('.lesson').forEach(l => {
+    const id = l.dataset.id;
+    const done = getStatus(id);
+    const hasGen = gen[`script_${id}`] || gen[`slide_${id}`];
+    if (status === 'done') l.style.display = done ? '' : 'none';
+    else if (status === 'todo') l.style.display = done ? 'none' : '';
+    else if (status === 'generated') l.style.display = hasGen ? '' : 'none';
+  });
+}
+
+function searchLessons(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.lesson').forEach(l => {
+    l.style.display = l.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+  if (q.length > 0) document.querySelectorAll('.module').forEach(m => m.classList.add('open'));
+}
+
+// ============ INIT ============
+document.getElementById('api-key-input').value = getApiKey();
+document.getElementById('model-script-input').value = getModelScript();
+document.getElementById('model-visual-input').value = getModelVisual();
+updateApiStatus();
+renderAll();
+</script>
+</body>
+</html>
